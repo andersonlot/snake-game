@@ -2,6 +2,18 @@
 let canva;
 let canva_width=500;
 let loopGame=false;
+var state={
+  up:false,
+  down:false,
+  left:false,
+  right:false,
+  reset:function(){
+    this.up=false;
+    this.down=false;
+    this.left=false;
+    this.right=false;
+  }
+};
 function setup() {
   DivCanvas=document.getElementById("canvas");
   DivCanvas.textContent="";
@@ -17,6 +29,7 @@ function setup() {
 }
 
 function draw() {
+  frameRate(10);
   //var lang = document.head.lang;
   clear();
   if(!loopGame){
@@ -34,8 +47,10 @@ function draw() {
       loopGame=true;
       }
     }
+    cobra.state.down=true;
   }
   if(loopGame){
+  
   noCursor();
   //background("black");
   quadricular(tamqua, 50);
@@ -49,12 +64,17 @@ function draw() {
   fill("blue");
   circle(cobra.p.x + tamqua / 4, cobra.p.y + tamqua / 3, tamqua / 4);
   circle(cobra.p.x + (3 * tamqua) / 4, cobra.p.y + tamqua / 3, tamqua / 4);
+  cobra.move();
   }
 }
 
 function keyPressed() {
-  cobra.move();
-  return false;
+  let _key=key;
+  if(_key==="ArrowLeft"||_key==="ArrowUp"||_key==="ArrowDown"||_key==="ArrowRight"){
+    cobra.changeDirection(_key);
+    return false;
+  }
+  
 }
 ///////////////////////////////////////////////
 class snake {
@@ -62,6 +82,7 @@ class snake {
     this.p = createVector(200, 200);
     this.p_snake = [this.p];
     this.score = 0;
+    this.state=state;
   }
   draw() {
     push();
@@ -73,18 +94,37 @@ class snake {
     }
     pop();
   }
+  changeDirection(_key){
+    if (_key == "ArrowUp"&&!this.state.down&&!this.state.up) {
+      this.state.reset();
+      this.state.up=true;
+    }
+    if (_key == "ArrowDown"&&!this.state.up&&!this.state.down) {
+      this.state.reset();
+      this.state.down=true;
+    }
+    if (_key == "ArrowLeft"&&!this.state.right&&!this.state.left) {
+      this.state.reset();
+      this.state.left=true;
+    }
+    if (_key == "ArrowRight"&&!this.state.left&&!this.state.right) {
+      this.state.reset();
+      this.state.right=true;
+    }
+  }
   move() {
     let p_old = this.p.copy();
-    if (key == "ArrowUp") {
+    
+    if (this.state.up) {
       this.p.y -= tamqua;
     }
-    if (key == "ArrowDown") {
+    if (this.state.down) {
       this.p.y += tamqua;
     }
-    if (key == "ArrowLeft") {
+    if (this.state.left) {
       this.p.x -= tamqua;
     }
-    if (key == "ArrowRight") {
+    if (this.state.right) {
       this.p.x += tamqua;
     }
     if (this.p.x >= width) {
