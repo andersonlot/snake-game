@@ -24,9 +24,9 @@ function setup() {
   canva = createCanvas(canva_width, 400);
   canva.parent('canvas');
   tamqua = 20;
-  foods=[];
-  for(let i=0;i<3;i++){
-    foods[i]= new food();
+  foods = [];
+  for (let i = 0; i < 3; i++) {
+    foods[i] = new food();
   }
   veneno = new poison();
   cobra = new snake();
@@ -36,20 +36,23 @@ function setup() {
 }
 
 function draw() {
-
-  //var lang = document.head.lang;
   clear();
-  background(255, 200, 0, 10);
+  //var lang = document.head.lang;
   if (!loopGame) {
     cursor('default')
     push();
     textAlign(CENTER, CENTER);
     fill(255, 200, 0);
-    textStyle(BOLD)
-    textSize(30 + 3 * sin(frameCount / 50));
-    text(" START! ", width / 2, height / 2 - 3 * sin(frameCount / 50));
+    textStyle(BOLD);
+
+    textSize(30 + 0 * sin(frameCount / 20));
+    noStroke();
+    text(" START! ", width / 2, height / 2 + (3 * sin(frameCount / 10)));
+    noFill();
+    stroke(255, 200, 0, 50 + 100 * sin(frameCount / 10));
+    arc(width / 2, height / 2, 170 + 50 * cos(frameCount / 10), 170 + 50 * cos(frameCount / 10), PI * cos(frameCount / 10), PI + 1.5 * PI * cos(frameCount / 10));
     pop();
-    if (mouseX > width / 2 - 60 && mouseX < width / 2 + 60 && mouseY > height / 2 - 3 * sin(frameCount / 50) - 15 && mouseY < height / 2 - 3 * sin(frameCount / 50) + 15) {
+    if (mouseX > width / 2 - 60 && mouseX < width / 2 + 60 && mouseY > height / 2 + 3 * sin(frameCount / 10) - 15 && mouseY < height / 2 + 3 * sin(frameCount / 10) + 15) {
       cursor('pointer');
       if (mouseIsPressed) {
         loopGame = true;
@@ -58,12 +61,14 @@ function draw() {
     cobra.state.down = true;
   }
   if (loopGame) {
+
+    background(255, 200, 0, 5);
     noCursor();
     veneno.draw();
     cobra.draw();
-    for(let i in foods){
+    for (let i in foods) {
       foods[i].draw();
-      foods[i]=cobra.eat(foods[i]);
+      foods[i] = cobra.eat(foods[i]);
     }
     veneno = cobra.eat(veneno);
     fill(255);
@@ -96,20 +101,20 @@ class snake {
     //stroke("black");
     //strokeWeight(tamqua / 10);
     for (let i = 0; i < this.p_snake.length; i++) {
-      fill(255,255,50);
-      if((i%3)===0){
-        fill(255,150,50);
+      fill(255, 255, 50);
+      if ((i % 3) === 0) {
+        fill(255, 150, 50);
       }
-      if(i===this.p_snake.length-1){
-        square(this.p_snake[i].x+5, this.p_snake[i].y+5, tamqua-10,2);
-      }else{
-        if(i===this.p_snake.length-2){
-          square(this.p_snake[i].x+4, this.p_snake[i].y+4, tamqua-8,2);
-        }else{
-          if(i===this.p_snake.length-3){
-            square(this.p_snake[i].x+3, this.p_snake[i].y+3, tamqua-6,3);
-          }else{
-            square(this.p_snake[i].x+1, this.p_snake[i].y+1, tamqua-2,4);
+      if (i === this.p_snake.length - 1) {
+        square(this.p_snake[i].x + 5, this.p_snake[i].y + 5, tamqua - 10, 2);
+      } else {
+        if (i === this.p_snake.length - 2) {
+          square(this.p_snake[i].x + 4, this.p_snake[i].y + 4, tamqua - 8, 2);
+        } else {
+          if (i === this.p_snake.length - 3) {
+            square(this.p_snake[i].x + 3, this.p_snake[i].y + 3, tamqua - 6, 3);
+          } else {
+            square(this.p_snake[i].x + 1, this.p_snake[i].y + 1, tamqua - 2, 4);
           }
         }
       }
@@ -221,11 +226,11 @@ class food {
     );
   }
   draw() {
-      noStroke();
-      fill(255, 70, 30);
-      //squ,,re(this.p.x, this.p.y, tamqua);
-      var sineWave=sin(frameCount/10);
-      circle(this.p.x + tamqua / 2, this.p.y + tamqua / 2, tamqua * (0.8+0.1*sineWave));
+    noStroke();
+    fill(255, 70, 30);
+    //squ,,re(this.p.x, this.p.y, tamqua);
+    var sineWave = sin(frameCount / 10);
+    circle(this.p.x + tamqua / 2, this.p.y + tamqua / 2, tamqua * (0.8 + 0.1 * sineWave));
 
   }
 }
