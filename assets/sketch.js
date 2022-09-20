@@ -24,9 +24,15 @@ function setup() {
   canva = createCanvas(canva_width, 400);
   canva.parent('canvas');
   tamqua = 20;
-  comida = new food();
+  foods=[];
+  for(let i=0;i<3;i++){
+    foods[i]= new food();
+  }
   veneno = new poison();
   cobra = new snake();
+  cobra.aumentacalda();
+  cobra.aumentacalda();
+  cobra.aumentacalda();
 }
 
 function draw() {
@@ -53,14 +59,17 @@ function draw() {
   }
   if (loopGame) {
     noCursor();
-    comida.draw();
     veneno.draw();
     cobra.draw();
-    comida = cobra.eat(comida);
+    for(let i in foods){
+      foods[i].draw();
+      foods[i]=cobra.eat(foods[i]);
+    }
     veneno = cobra.eat(veneno);
-    fill(200, 255, 200);
-    text(cobra.score, 20, 20);
-
+    fill(255);
+    textStyle(BOLD);
+    textSize(15);
+    text(cobra.score, 20, 25);
     cobra.move();
   }
 }
@@ -79,18 +88,37 @@ class snake {
     this.score = 0;
     this.state = state;
     this.countToMove = 0;
-    this.countMax = 4;
+    this.countMax = 8;
   }
   draw() {
     push();
     fill("white");
-    stroke("black");
-    strokeWeight(tamqua / 10);
+    //stroke("black");
+    //strokeWeight(tamqua / 10);
     for (let i = 0; i < this.p_snake.length; i++) {
-      square(this.p_snake[i].x, this.p_snake[i].y, tamqua);
+      fill(255,255,50);
+      if((i%3)===0){
+        fill(255,150,50);
+      }
+      if(i===this.p_snake.length-1){
+        square(this.p_snake[i].x+5, this.p_snake[i].y+5, tamqua-10,2);
+      }else{
+        if(i===this.p_snake.length-2){
+          square(this.p_snake[i].x+4, this.p_snake[i].y+4, tamqua-8,2);
+        }else{
+          if(i===this.p_snake.length-3){
+            square(this.p_snake[i].x+3, this.p_snake[i].y+3, tamqua-6,3);
+          }else{
+            square(this.p_snake[i].x+1, this.p_snake[i].y+1, tamqua-2,4);
+          }
+        }
+      }
     }
     noStroke();
-    fill("blue");
+    fill("white");
+    circle(this.p.x + tamqua / 4, this.p.y + tamqua / 3, tamqua / 3);
+    circle(this.p.x + (3 * tamqua) / 4, this.p.y + tamqua / 3, tamqua / 3);
+    fill("black");
     circle(this.p.x + tamqua / 4, this.p.y + tamqua / 3, tamqua / 4);
     circle(this.p.x + (3 * tamqua) / 4, this.p.y + tamqua / 3, tamqua / 4);
     pop();
@@ -191,48 +219,14 @@ class food {
       tamqua * Math.trunc(random(0, width / tamqua)),
       tamqua * Math.trunc(random(0, height / tamqua))
     );
-    this.pisca = 0;
-    this.contframe = 0;
   }
   draw() {
-    if (this.pisca) {
-      this.contframe++;
-      if (this.contframe >= 5) {
-        this.contframe = 0;
-        this.pisca = 0;
-      }
-    }
-    if (this.pisca == 0) {
-      this.contframe++;
       noStroke();
       fill(255, 70, 30);
       //squ,,re(this.p.x, this.p.y, tamqua);
-      circle(this.p.x + tamqua / 2, this.p.y + tamqua / 2, tamqua * 0.8);
-      push();
-      stroke("green");
-      strokeWeight(tamqua / 10);
-      line(
-        this.p.x + tamqua / 2,
-        this.p.y + tamqua / 2 - tamqua / 5,
-        this.p.x + tamqua / 2 + tamqua / 10,
-        this.p.y + tamqua / 2 - tamqua / 2
-      );
-      fill("green");
-      noStroke();
-      triangle(
-        this.p.x + tamqua / 2,
-        this.p.y + tamqua / 2 - 0.3 * tamqua,
-        this.p.x + tamqua / 2 + 0.1 * tamqua,
-        this.p.y + tamqua / 2 - 0.5 * tamqua,
-        this.p.x + tamqua / 2 - 0.2 * tamqua,
-        this.p.y + tamqua / 2 - 0.45 * tamqua
-      );
-      pop();
-      if (this.contframe >= 5) {
-        this.contframe = 0;
-        this.pisca = 1;
-      }
-    }
+      var sineWave=sin(frameCount/10);
+      circle(this.p.x + tamqua / 2, this.p.y + tamqua / 2, tamqua * (0.8+0.1*sineWave));
+
   }
 }
 class poison {
