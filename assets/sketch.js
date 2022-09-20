@@ -1,6 +1,7 @@
 
 let canva;
 let canva_width=500;
+let loopGame=false;
 function setup() {
   DivCanvas=document.getElementById("canvas");
   DivCanvas.textContent="";
@@ -18,6 +19,24 @@ function setup() {
 function draw() {
   //var lang = document.head.lang;
   clear();
+  if(!loopGame){
+    cursor('default')
+    push();
+    textAlign(CENTER,CENTER);
+    fill(255,200,0);
+    textStyle(BOLD)
+    textSize(30+3*sin(frameCount/50));
+    text(" START! ",width/2,height/2-3*sin(frameCount/50));
+    pop();
+    if(mouseX>width/2-60&&mouseX<width/2+60&&mouseY>height/2-3*sin(frameCount/50)-15&&mouseY<height/2-3*sin(frameCount/50)+15){
+      cursor('pointer');
+      if(mouseIsPressed){
+      loopGame=true;
+      }
+    }
+  }
+  if(loopGame){
+  noCursor();
   //background("black");
   quadricular(tamqua, 50);
   comida.draw();
@@ -30,6 +49,7 @@ function draw() {
   fill("blue");
   circle(cobra.p.x + tamqua / 4, cobra.p.y + tamqua / 3, tamqua / 4);
   circle(cobra.p.x + (3 * tamqua) / 4, cobra.p.y + tamqua / 3, tamqua / 4);
+  }
 }
 
 function keyPressed() {
