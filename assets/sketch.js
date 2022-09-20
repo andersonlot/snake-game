@@ -1,25 +1,25 @@
 
 let canva;
-let canva_width=400;
-let loopGame=false;
-var state={
-  up:false,
-  down:false,
-  left:false,
-  right:false,
-  reset:function(){
-    this.up=false;
-    this.down=false;
-    this.left=false;
-    this.right=false;
+let canva_width = 400;
+let loopGame = false;
+var state = {
+  up: false,
+  down: false,
+  left: false,
+  right: false,
+  reset: function () {
+    this.up = false;
+    this.down = false;
+    this.left = false;
+    this.right = false;
   }
 };
 function setup() {
   frameRate(60);
-  DivCanvas=document.getElementById("canvas");
-  DivCanvas.textContent="";
-  if(windowWidth<400){
-    canva_width=windowWidth-80;
+  DivCanvas = document.getElementById("canvas");
+  DivCanvas.textContent = "";
+  if (windowWidth < 475) {
+    canva_width = windowWidth - 75;
   }
   canva = createCanvas(canva_width, 400);
   canva.parent('canvas');
@@ -33,47 +33,47 @@ function draw() {
 
   //var lang = document.head.lang;
   clear();
-  background(255,200,0,10);
-  if(!loopGame){
+  background(255, 200, 0, 10);
+  if (!loopGame) {
     cursor('default')
     push();
-    textAlign(CENTER,CENTER);
-    fill(255,200,0);
+    textAlign(CENTER, CENTER);
+    fill(255, 200, 0);
     textStyle(BOLD)
-    textSize(30+3*sin(frameCount/50));
-    text(" START! ",width/2,height/2-3*sin(frameCount/50));
+    textSize(30 + 3 * sin(frameCount / 50));
+    text(" START! ", width / 2, height / 2 - 3 * sin(frameCount / 50));
     pop();
-    if(mouseX>width/2-60&&mouseX<width/2+60&&mouseY>height/2-3*sin(frameCount/50)-15&&mouseY<height/2-3*sin(frameCount/50)+15){
+    if (mouseX > width / 2 - 60 && mouseX < width / 2 + 60 && mouseY > height / 2 - 3 * sin(frameCount / 50) - 15 && mouseY < height / 2 - 3 * sin(frameCount / 50) + 15) {
       cursor('pointer');
-      if(mouseIsPressed){
-      loopGame=true;
+      if (mouseIsPressed) {
+        loopGame = true;
       }
     }
-    cobra.state.down=true;
+    cobra.state.down = true;
   }
-  if(loopGame){
-  noCursor();
-  //background("black");
-  //quadricular(tamqua, 50);
-  comida.draw();
-  veneno.draw();
-  cobra.draw();
-  comida = cobra.eat(comida);
-  veneno = cobra.eat(veneno);
-  fill(200, 255, 200);
-  text(cobra.score, 20, 20);
-  
-  cobra.move();
+  if (loopGame) {
+    noCursor();
+    //background("black");
+    //quadricular(tamqua, 50);
+    comida.draw();
+    veneno.draw();
+    cobra.draw();
+    comida = cobra.eat(comida);
+    veneno = cobra.eat(veneno);
+    fill(200, 255, 200);
+    text(cobra.score, 20, 20);
+
+    cobra.move();
   }
 }
 
 function keyPressed() {
-  let _key=key;
-  if(_key==="ArrowLeft"||_key==="ArrowUp"||_key==="ArrowDown"||_key==="ArrowRight"){
+  let _key = key;
+  if (_key === "ArrowLeft" || _key === "ArrowUp" || _key === "ArrowDown" || _key === "ArrowRight") {
     cobra.changeDirection(_key);
     return false;
   }
-  
+
 }
 ///////////////////////////////////////////////
 class snake {
@@ -81,9 +81,9 @@ class snake {
     this.p = createVector(200, 200);
     this.p_snake = [this.p];
     this.score = 0;
-    this.state=state;
-    this.countToMove=0;
-    this.countMax=4;
+    this.state = state;
+    this.countToMove = 0;
+    this.countMax = 4;
   }
   draw() {
     push();
@@ -99,55 +99,55 @@ class snake {
     circle(this.p.x + (3 * tamqua) / 4, this.p.y + tamqua / 3, tamqua / 4);
     pop();
   }
-  changeDirection(_key){
-    if (_key == "ArrowUp"&&!this.state.down&&!this.state.up) {
+  changeDirection(_key) {
+    if (_key == "ArrowUp" && !this.state.down && !this.state.up) {
       this.state.reset();
-      this.state.up=true;
+      this.state.up = true;
     }
-    if (_key == "ArrowDown"&&!this.state.up&&!this.state.down) {
+    if (_key == "ArrowDown" && !this.state.up && !this.state.down) {
       this.state.reset();
-      this.state.down=true;
+      this.state.down = true;
     }
-    if (_key == "ArrowLeft"&&!this.state.right&&!this.state.left) {
+    if (_key == "ArrowLeft" && !this.state.right && !this.state.left) {
       this.state.reset();
-      this.state.left=true;
+      this.state.left = true;
     }
-    if (_key == "ArrowRight"&&!this.state.left&&!this.state.right) {
+    if (_key == "ArrowRight" && !this.state.left && !this.state.right) {
       this.state.reset();
-      this.state.right=true;
+      this.state.right = true;
     }
   }
   move() {
     let p_old = this.p.copy();
     this.countToMove++;
-    if(this.countToMove>this.countMax){
-      this.countToMove=0
-    if (this.state.up) {
-      this.p.y -= tamqua;
+    if (this.countToMove > this.countMax) {
+      this.countToMove = 0
+      if (this.state.up) {
+        this.p.y -= tamqua;
+      }
+      if (this.state.down) {
+        this.p.y += tamqua;
+      }
+      if (this.state.left) {
+        this.p.x -= tamqua;
+      }
+      if (this.state.right) {
+        this.p.x += tamqua;
+      }
+      if (this.p.x >= width) {
+        this.p.x = 0;
+      }
+      if (this.p.x < 0) {
+        this.p.x = width - tamqua;
+      }
+      if (this.p.y >= height) {
+        this.p.y = 0;
+      }
+      if (this.p.y < 0) {
+        this.p.y = height - tamqua;
+      }
+      this.atualiza_p_snake(p_old);
     }
-    if (this.state.down) {
-      this.p.y += tamqua;
-    }
-    if (this.state.left) {
-      this.p.x -= tamqua;
-    }
-    if (this.state.right) {
-      this.p.x += tamqua;
-    }
-    if (this.p.x >= width) {
-      this.p.x = 0;
-    }
-    if (this.p.x < 0) {
-      this.p.x = width - tamqua;
-    }
-    if (this.p.y >= height) {
-      this.p.y = 0;
-    }
-    if (this.p.y < 0) {
-      this.p.y = height - tamqua;
-    }
-    this.atualiza_p_snake(p_old);
-  }
   }
   eat(com_) {
     if (com_.class == "food") {
@@ -183,8 +183,8 @@ class snake {
     if (this.p_snake.length > 1) {
       this.p_snake[1] = p_old.copy();
     }
-    if (this.p_snake.length==1){
-      this.p_snake[0]=this.p;
+    if (this.p_snake.length == 1) {
+      this.p_snake[0] = this.p;
     }
   }
 }
