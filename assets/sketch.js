@@ -53,8 +53,6 @@ function draw() {
   }
   if (loopGame) {
     noCursor();
-    //background("black");
-    //quadricular(tamqua, 50);
     comida.draw();
     veneno.draw();
     cobra.draw();
@@ -66,7 +64,6 @@ function draw() {
     cobra.move();
   }
 }
-
 function keyPressed() {
   let _key = key;
   if (_key === "ArrowLeft" || _key === "ArrowUp" || _key === "ArrowDown" || _key === "ArrowRight") {
@@ -75,7 +72,6 @@ function keyPressed() {
   }
 
 }
-///////////////////////////////////////////////
 class snake {
   constructor() {
     this.p = createVector(200, 200);
@@ -188,7 +184,6 @@ class snake {
     }
   }
 }
-///////////////////////////////////////////////
 class food {
   constructor() {
     this.class = "food";
@@ -240,7 +235,6 @@ class food {
     }
   }
 }
-///////////////////////////////////////////////
 class poison {
   constructor() {
     this.class = "poison";
